@@ -1,0 +1,66 @@
+const puppeteer = require('puppeteer');
+
+(async () => {
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('https://app.cfe.mx/aplicaciones/CCFE/SolicitudesCFE/Solicitudes/IncrementoDeCargaGmx.aspx');
+
+    // Wait for the input field to appear
+    await page.waitForXPath('//*[@id="MainContent_tbRPU"]');
+    const inputElement = await page.$x('//*[@id="MainContent_tbRPU"]');
+    await inputElement[0].type('817100202588');
+    await page.keyboard.press('Enter');
+
+    // Wait for navigation to complete (e.g., page load or form submission)
+    await page.waitForNavigation();
+
+    // Evaluate JavaScript to obtain the value after navigation
+    const outputNombre = await page.evaluate(() => {
+      const outputElement = document.getElementById('MainContent_tbNombre');
+      return outputElement ? outputElement.value : null;
+    });
+    const outputDireccion = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbDireccion');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputRMU = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbCuenta');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputUso = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbUso');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputTarifa = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbTarifa');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputCarga = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbCargaActual');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputDemanda = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbDemActual');
+        return outputElement ? outputElement.value : null;
+      });
+
+      const outputHilos = await page.evaluate(() => {
+        const outputElement = document.getElementById('MainContent_tbHilos');
+        return outputElement ? outputElement.value : null;
+      });
+
+    console.log('Nombre:',outputNombre,'Dirección:', outputDireccion,'RMU: ',outputRMU,'Uso:',outputUso,'Tarifa:',outputTarifa, 'Carga:',outputCarga, 'Demanda:',outputDemanda, 'Hilos:',outputHilos);
+
+    // Close the browser
+    await browser.close();
+    console.log('Script completed successfully.');
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+})();
